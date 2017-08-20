@@ -1,0 +1,3 @@
+pip3 install aiohttp
+pip3 install websockets
+python3 -m pip install -U discord.py
