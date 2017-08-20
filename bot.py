@@ -17,7 +17,7 @@ async def on_ready():
     print(client.user.name)
     print(client.user.id)
     print('------')
-    logger.info('Bot is starting...')
+    logger.info('Bot is ready...')
 
 
 @client.event
