@@ -1,22 +1,17 @@
 import asyncio
 import discord
+import inspect
 import logging
 from rq import Queue
 
-from commands import COMMANDS
+import commands
 
-
-logger = logging.getLogger('logger.json')
 
 TOKEN = 'MzQ3MzA3NTU5NTQ1NDcwOTc3.DHWtnQ.VPnwsznaHhlKx2g8URs4VgEAWCw'
 
-
-TEST_DICT = {'help': help_bot}
-
-# TODO - add time event for lunch and tea
-# TODO - send klala every hour
-
+logger = logging.getLogger('logger.json')
 client = discord.Client()
+
 
 @client.event
 async def on_ready():
@@ -34,24 +29,29 @@ async def on_message(message):
 
     if message.content.startswith('!bot'):
 
-        arguments = message.content.split()[1:]
+        arguments = message.content.split()[1:]  # get arguments
 
-        if no arguments:
-            bot_help()
+        if not arguments:  # no command
             return
 
-        command = arguments[0]
+        command_name = arguments[0]
+        func = getattr(commands, command_name)
 
-        if command in TEST_DICT:
-            TEST_DICT[command]()
-        else:
-            bot_help()
+        # not a valid command, function doesn't exist
+        if not func:
             return
+
+        arguments = arguments[1:]  # function arguments
+        required_args = inspect.getargspec(func)[0]
+
+        if (len(required_args) != len(arguments)):
+            return
+
+        response = func(*arguments)
+        await client.send_message(message.channel, response)  # send response
 
     elif message.content.startswith('!sleep'):
         await asyncio.sleep(5)
-        await client.send_message(message.channel, 'Done sleeping')
 
 client.run(TOKEN)
-
 logger.info('Bot is starting...')
