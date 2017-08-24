@@ -1,15 +1,56 @@
-
 import psycopg2
+from urllib.parse import urlparse
 
-from db_credentials import DB_NAME, DB_USER, DB_HOST, DB_PASS
+from db_credentials import DB_URI
 
-connection_str = "dbname='{0} user='{1}' host='{2}' password='{3}'"
 
-try:
-    conn = psycopg2.connect(connection_str.format(DB_NAME,
-                                                  DB_USER,
-                                                  DB_HOST,
-                                                  DB_PASS))
+def setup_connection():
+    """
+    Setup the connection for the database
+    :return:
+    """
+    result = urlparse(DB_URI)
 
-except:
-    print ("I am unable to connect to the database")
+    username = result.username
+    password = result.password
+    database = result.path[1:]
+    hostname = result.hostname
+    connection = psycopg2.connect(
+        database=database,
+        user=username,
+        password=password,
+        host=hostname
+    )
+
+    return connection
+
+
+def create_table(cur, table_name):
+    """
+    Create a table with a primary key and add it to the database
+    :param cur:
+    :param table_name:
+    :return:
+    """
+    cur.execute('CREATE TABLE IF NOT EXISTS {0} ("id" SERIAL PRIMARY KEY)'.format(table_name))
+
+
+def add_col(cur, table, col_name):
+    """
+    add a col to a certain table by a name.
+    :param cur:
+    :param table:
+    :param col_name:
+    :return:
+    """
+    pass
+
+
+def add_row(cur, table):
+    """
+    add a row to a certain table.
+    :param cur:
+    :param table:
+    :return:
+    """
+    pass

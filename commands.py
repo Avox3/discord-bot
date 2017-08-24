@@ -8,7 +8,11 @@ import inspect
 import random
 import sys
 
+from db import setup_connection
 from data import DICKPICKS, OSSAS, gal_quotes
+
+connection = setup_connection()
+cur = connection.cursor()
 
 
 def add_emoji(emoji_name, img_path):
