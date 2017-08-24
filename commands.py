@@ -8,7 +8,7 @@ import inspect
 import random
 import sys
 
-from data import DICKPICKS, OSSAS
+from data import DICKPICKS, OSSAS, gal_quotes
 
 
 def add_emoji(emoji_name, img_path):
@@ -22,7 +22,7 @@ def add_emoji(emoji_name, img_path):
     pass
 
 
-def search(query):
+def search(query, long_param=True):
     """This function googles by query. """
     pass
 
@@ -34,12 +34,18 @@ def cookie_clicker():
 
 def gal_quote():
     """This function sends a random quote by Gal."""
-    pass
+    if gal_quotes:
+        return random.choice(gal_quotes)
+    return "No QUOTE FROM GAL"
 
 
-def gal_add_quote(quote):
+def add_quote(user, quote, long_param=True):
     """This function adds a quote, allowed only to Gal."""
-    pass
+    if "GAL" not in [role.name for role in user.roles]:
+        return "You are not GAL!"
+
+    gal_quotes.append(quote)
+    return "Quote added :)"
 
 
 def ossas():

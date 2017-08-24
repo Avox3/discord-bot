@@ -2,7 +2,6 @@ import asyncio
 import discord
 import inspect
 import logging
-from rq import Queue
 
 import commands
 
@@ -44,8 +43,12 @@ async def on_message(message):
         arguments = arguments[1:]  # function arguments
         required_args = inspect.getargspec(func)[0]
 
-        if (len(required_args) != len(arguments)):
-            return
+        if 'long_param' in required_args:
+            arguments = [" ".join(arguments)]
+
+        # add user as argument
+        if 'user' in required_args:
+            arguments = [message.author] + arguments
 
         response = func(*arguments)
         await client.send_message(message.channel, response)  # send response
