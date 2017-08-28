@@ -101,5 +101,4 @@ ENV/
 .mypy_cache/
 
 # app files
-db_credentials.py
-tokens.txt
+settings/

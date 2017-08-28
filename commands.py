@@ -13,7 +13,7 @@ import requests
 import json
 
 from db import setup_connection, add_row, get_random_row
-from data import DICKPICKS, OSSAS, gal_quotes
+
 
 connection = setup_connection()
 cur = connection.cursor()
@@ -48,8 +48,9 @@ def cookie_clicker():
 
 def gal_quote():
     """This function sends a random quote by Gal."""
-    if gal_quotes:
-        return get_random_row(cur, 'quotes').quote
+    row = get_random_row(cur, 'quotes')
+    if row:
+        return row.quote
     return "No QUOTE FROM GAL"
 
 
@@ -64,15 +65,10 @@ def add_quote(user, quote, long_param=True):
 
 def ossas():
     """This function sends the name of ossas."""
-    return OSSAS
+    return "uvuvwevwevweonyetenyevwUgwemubwenOSSAS."
 
 
-def dickpick():
-    """This function returns a random ascii dickpick."""
-    return random.choice(DICKPICKS)
-
-
-def urban_search(query, long_param=True):
+def urban(query, long_param=True):
     """
     This function returns the first search result from Urban Dictionary
     by the query.
@@ -91,7 +87,6 @@ def urban_search(query, long_param=True):
             return "There is no definition for {} in Urban Dictionary".format(query)
     except ConnectionError as e:
         print(e.message)
-        raise ConnectionError
 
 
 def bot_help(*args):
@@ -108,7 +103,7 @@ def bot_help(*args):
         manual = ""
         for name, func in functions:
             manual += "\n\n"
-            manual += repr(name)
-            manual += '\t' + func.__doc__
+            manual += "__**{0}**__".format(name)
+            manual += func.__doc__
 
         return manual

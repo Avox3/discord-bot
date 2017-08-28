@@ -1,7 +1,7 @@
 import psycopg2
 from urllib.parse import urlparse
 
-from db_credentials import DB_URI
+from settings.db_credentials import DB_URI
 
 
 def setup_connection():
@@ -55,7 +55,5 @@ def get_random_row(cur, table):
     cur.execute(query)
 
     row = cur.fetchone()[0]
-    if not row:
-        return "No quotes here..."
-
-    return row
+    if row:
+        return row
