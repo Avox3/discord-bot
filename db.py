@@ -25,32 +25,37 @@ def setup_connection():
     return connection
 
 
-def create_table(cur, table_name):
-    """
-    Create a table with a primary key and add it to the database
-    :param cur:
-    :param table_name:
-    :return:
-    """
-    cur.execute('CREATE TABLE IF NOT EXISTS {0} ("id" SERIAL PRIMARY KEY)'.format(table_name))
-
-
-def add_col(cur, table, col_name):
-    """
-    add a col to a certain table by a name.
-    :param cur:
-    :param table:
-    :param col_name:
-    :return:
-    """
-    pass
-
-
-def add_row(cur, table):
+def add_row(cur, table, db_dict):
     """
     add a row to a certain table.
-    :param cur:
-    :param table:
-    :return:
+    :param cur: connection's cursor.
+    :param table: table's name.
+    :param db_dict: a pair of (field: key).
     """
-    pass
+
+    # extract data
+    fields = '(' + ", ".join(db_dict.keys()) + ')'
+    values = str(tuple(db_dict.values()))[:-2] + ')'
+
+    # execute query
+    insert_query = "INSERT INTO {t_name} {fields} VALUES {values};"
+    insert_query = insert_query.format(
+        t_name=table,
+        fields=fields,
+        values=values
+    )
+
+    cur.execute(insert_query)
+
+
+def get_random_row(cur, table):
+    """This function returns a random row in the table."""
+
+    query = "SELECT quote FROM {table} ORDER BY RANDOM() LIMIT 1".format(table)
+    cur.execute(query)
+
+    row = cur.fetchone()[0]
+    if not row:
+        return "No quotes here..."
+
+    return row

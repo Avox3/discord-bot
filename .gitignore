@@ -102,3 +102,4 @@ ENV/
 
 # app files
 db_credentials.py
+tokens.txt

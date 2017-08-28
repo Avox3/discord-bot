@@ -6,7 +6,7 @@ import logging
 import commands
 
 
-TOKEN = 'MzQ3MzA3NTU5NTQ1NDcwOTc3.DHWtnQ.VPnwsznaHhlKx2g8URs4VgEAWCw'
+TOKEN = open('tokens.txt', 'r').read().split('\n')[0]
 
 logger = logging.getLogger('logger.json')
 client = discord.Client()

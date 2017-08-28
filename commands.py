@@ -1,14 +1,16 @@
 """
     TODO - add time event for lunch and tea
     TODO - send klala every hour
+    TODO - urban dictionary
     TODO - something with havura shel batlanim
+    TODO - voice : OSSAS, SAX GUY, OK-OK-OK
 """
 
 import inspect
 import random
 import sys
 
-from db import setup_connection
+from db import setup_connection, add_row, get_random_row
 from data import DICKPICKS, OSSAS, gal_quotes
 
 connection = setup_connection()
@@ -26,6 +28,12 @@ def add_emoji(emoji_name, img_path):
     pass
 
 
+def commands():
+    """This function returns the bot's commands."""
+    curr_module = sys.modules[__name__]
+    return [command[0] for command in inspect.getmembers(curr_module, inspect.isfunction)]
+
+
 def search(query, long_param=True):
     """This function googles by query. """
     pass
@@ -39,7 +47,7 @@ def cookie_clicker():
 def gal_quote():
     """This function sends a random quote by Gal."""
     if gal_quotes:
-        return random.choice(gal_quotes)
+        return get_random_row(cur, 'quotes').quote
     return "No QUOTE FROM GAL"
 
 
@@ -48,7 +56,7 @@ def add_quote(user, quote, long_param=True):
     if "GAL" not in [role.name for role in user.roles]:
         return "You are not GAL!"
 
-    gal_quotes.append(quote)
+    add_row(cur, 'quotes', {'quote': quote})
     return "Quote added :)"
 
 
