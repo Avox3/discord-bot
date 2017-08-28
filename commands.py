@@ -9,6 +9,8 @@
 import inspect
 import random
 import sys
+import requests
+import json
 
 from db import setup_connection, add_row, get_random_row
 from data import DICKPICKS, OSSAS, gal_quotes
@@ -68,6 +70,28 @@ def ossas():
 def dickpick():
     """This function returns a random ascii dickpick."""
     return random.choice(DICKPICKS)
+
+
+def urban_search(query, long_param=True):
+    """
+    This function returns the first search result from Urban Dictionary
+    by the query.
+    The search result includes definition and example.
+    :param query:
+    :return:
+    """
+    try:
+        url = "http://api.urbandictionary.com/v0/define?term={}".format(query)
+        request = requests.get(url)
+        data = json.loads(request.text)
+        if data['result_type'] == "exact":
+            raw_output = "Definition:\n" + data['list'][0]['definition'] + "\nExample:\n" + data['list'][0]['example']
+            return raw_output
+        else:
+            return "There is no definition for {} in Urban Dictionary".format(query)
+    except ConnectionError as e:
+        print(e.message)
+        raise ConnectionError
 
 
 def bot_help(*args):
