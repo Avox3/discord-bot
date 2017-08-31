@@ -12,6 +12,8 @@ import sys
 import requests
 import json
 
+from foaas import fuck
+
 from db import setup_connection, add_row, get_random_row
 
 
@@ -87,6 +89,17 @@ def urban(query, long_param=True):
             return "There is no definition for {} in Urban Dictionary".format(query)
     except ConnectionError as e:
         print(e.message)
+
+
+def fuck_you(user, person):
+    """
+    This function returns a random fuck off message to a name
+    from the called user.
+    :param user:
+    :param person:
+    :return:
+    """
+    return fuck.random(name=person, from_=user.name).text
 
 
 def bot_help(*args):

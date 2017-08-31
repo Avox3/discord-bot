@@ -3,3 +3,4 @@ websockets
 discord
 psycopg2
 requests
+foaas
