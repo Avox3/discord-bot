@@ -14,6 +14,7 @@ from foaas import fuck
 
 from db import setup_connection, add_row, get_random_row
 
+
 connection = setup_connection()
 cur = connection.cursor()
 
@@ -71,6 +72,8 @@ def ossas():
 
     return "uvuvwevwevweonyetenyevwUgwemubwenOSSAS."
 
+
+def urban(query, long_param=True):
     """
     This function returns the first search result from Urban Dictionary
     by the query.
@@ -84,10 +87,10 @@ def ossas():
         if data['result_type'] == "exact":
             definitions = data['list']
             output = ""
-            for definition in definitions[:num_of_definitons]:
+            for definition in definitions[:3]:
                 if len(definitions) > 1:
-                    output += "**Definition** " + str(definitions.index(definition) + 1) \
-                              + ": " + definition['definition']
+                    output += "**Definition** " + str(definitions.index(definition)+1)\
+                                + ": " + definition['definition']
                 else:
                     output += "**Definition**" + ": " + definition['definition']
                 if definition['example']:
