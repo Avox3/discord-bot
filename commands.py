@@ -13,7 +13,7 @@ import json
 from foaas import fuck
 
 from db import setup_connection, add_row, get_random_row
-
+from settings.google_api import GOOGLE_API_KEY, CX
 
 connection = setup_connection()
 cur = connection.cursor()
@@ -38,14 +38,25 @@ def commands():
 
 def search(query, long_param=True):
     """This function googles by query. """
+    url = "https://www.googleapis.com/customsearch/v1?key={key}&cx={cx}&q={text}".format(
+        key=GOOGLE_API_KEY, cx=CX, text=query
+    )
 
-    pass
+    try:
+        response = requests.get(url)
+        data = json.loads(response.text)
 
+        total_results = int(data['queries']['request'][0]['totalResults'])
+        if total_results:
 
-def cookie_clicker():
-    """This function increases cookie clicker by 1."""
+            item = data['items'][0]
+            link = item['link']
+            title = item['title']
 
-    pass
+            return '[{title}]({link})'.format(title=title, link=link)
+
+    except:
+        return "Error"
 
 
 def gal_quote():
@@ -89,8 +100,8 @@ def urban(query, long_param=True):
             output = ""
             for definition in definitions[:3]:
                 if len(definitions) > 1:
-                    output += "**Definition** " + str(definitions.index(definition)+1)\
-                                + ": " + definition['definition']
+                    output += "**Definition** " + str(definitions.index(definition) + 1) \
+                              + ": " + definition['definition']
                 else:
                     output += "**Definition**" + ": " + definition['definition']
                 if definition['example']:
